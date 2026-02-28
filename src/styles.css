@@ -1,3 +1,38 @@
-@use "tailwindcss";
+@import "tailwindcss";
 
-/* Add your global styles below */
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Inter Tight', system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: 'Inter Tight', system-ui, sans-serif;
+}
+
+@layer base {
+  :root {
+    --color-primary: oklch(0.55 0.18 250);
+    --color-primary-hover: oklch(0.48 0.18 250);
+    --color-accent: oklch(0.65 0.2 165);
+    --color-surface: oklch(0.98 0.005 250);
+    --color-surface-elevated: oklch(1 0 0);
+    --color-muted: oklch(0.55 0.02 250);
+    --color-border: oklch(0.9 0.01 250);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: oklch(0.985 0.001 106);
+    color: oklch(0.216 0.006 56);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+  }
+}
