@@ -63,34 +63,38 @@ import { AuthService } from '../../core/services/auth.service';
           </div>
         </div>
 
-        <!-- Lessons List -->
-        <div class="bg-white rounded-xl border border-stone-200 overflow-hidden">
+        <!-- Lessons (always visible) -->
+        <div class="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm">
           <h2 class="px-6 py-4 font-display font-semibold text-stone-900 border-b border-stone-100">Lessons</h2>
           <div class="divide-y divide-stone-100">
-            @for (lesson of (course()!.lessons ?? []); track lesson.id; let i = $index) {
-              <a
-                [routerLink]="['/student/course', course()!.id, 'lesson', lesson.id]"
-                class="flex items-center gap-4 px-6 py-4 hover:bg-stone-50/50 transition-colors"
-              >
-                <span class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-sm font-medium text-stone-600 shrink-0">
-                  {{ i + 1 }}
-                </span>
-                <div class="min-w-0 flex-1">
-                  <p class="font-medium text-stone-900">{{ lesson.title }}</p>
-                </div>
-                <svg class="w-5 h-5 text-stone-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
+            @if ((course()!.lessons ?? []).length > 0) {
+              @for (lesson of (course()!.lessons ?? []); track lesson.id; let i = $index) {
+                <a
+                  [routerLink]="['/student/course', course()!.id, 'lesson', lesson.id]"
+                  class="flex items-center gap-4 px-6 py-4 hover:bg-stone-50/50 transition-colors"
+                >
+                  <span class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-sm font-medium text-stone-600 shrink-0">
+                    {{ i + 1 }}
+                  </span>
+                  <div class="min-w-0 flex-1">
+                    <p class="font-medium text-stone-900">{{ lesson.title }}</p>
+                  </div>
+                  <svg class="w-5 h-5 text-stone-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              }
+            } @else {
+              <div class="px-6 py-6 text-stone-500 text-sm">No lessons in this course yet.</div>
             }
           </div>
         </div>
 
-        <!-- Quizzes -->
-        @if ((course()!.quizzes ?? []).length > 0) {
-          <div class="bg-white rounded-xl border border-stone-200 overflow-hidden">
-            <h2 class="px-6 py-4 font-display font-semibold text-stone-900 border-b border-stone-100">Quizzes</h2>
-            <div class="divide-y divide-stone-100">
+        <!-- Quizzes (always visible) -->
+        <div class="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm">
+          <h2 class="px-6 py-4 font-display font-semibold text-stone-900 border-b border-stone-100">Quizzes</h2>
+          <div class="divide-y divide-stone-100">
+            @if ((course()!.quizzes ?? []).length > 0) {
               @for (quiz of (course()!.quizzes ?? []); track quiz.id) {
                 <a
                   [routerLink]="['/student/course', course()!.id, 'quiz', quiz.id]"
@@ -107,9 +111,11 @@ import { AuthService } from '../../core/services/auth.service';
                   <span class="text-sm text-indigo-600 font-medium">Take quiz →</span>
                 </a>
               }
-            </div>
+            } @else {
+              <div class="px-6 py-6 text-stone-500 text-sm">No quizzes in this course yet. Check back later.</div>
+            }
           </div>
-        }
+        </div>
       } @else {
         <p class="text-stone-500">Loading course...</p>
       }

@@ -40,6 +40,13 @@ export class QuizService {
     return this.http.get<Quiz>(`${this.apiUrl}/${id}`);
   }
 
+  create(courseId: number, payload: { title: string; questions?: { questionText: string; correctAnswer: string }[] }): Observable<Quiz> {
+    return this.http.post<Quiz>(`${this.apiUrl}?courseId=${courseId}`, {
+      title: payload.title,
+      questions: payload.questions ?? [],
+    });
+  }
+
   submit(quizId: number, body: QuizSubmitRequest): Observable<QuizSubmitResponse | number> {
     return this.http.post<QuizSubmitResponse | number>(`${this.apiUrl}/submit`, {
       quizId,
