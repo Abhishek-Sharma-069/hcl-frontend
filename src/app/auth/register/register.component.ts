@@ -60,6 +60,20 @@ import { AuthService } from '../../core/services/auth.service';
               />
               <p class="mt-1 text-xs text-stone-500">At least 6 characters</p>
             </div>
+            <div>
+              <label for="role" class="block text-sm font-medium text-stone-700 mb-1.5">I am a</label>
+              <select
+                id="role"
+                [(ngModel)]="role"
+                name="role"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
+              >
+                <option value="student">Student – Browse courses, enroll, take quizzes</option>
+                <option value="instructor">Instructor – Create and manage courses, lessons, quizzes</option>
+                <option value="admin">Admin – Manage courses, students, and instructors</option>
+              </select>
+            </div>
             @if (error()) {
               <p class="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{{ error() }}</p>
             }
@@ -88,6 +102,7 @@ export class RegisterComponent {
   fullName = '';
   email = '';
   password = '';
+  role: 'student' | 'instructor' | 'admin' = 'student';
   showPassword = signal(false);
   loading = signal(false);
   error = signal('');
@@ -95,13 +110,20 @@ export class RegisterComponent {
   onSubmit() {
     this.loading.set(true);
     this.error.set('');
-    this.auth.register({ name: this.fullName, email: this.email, password: this.password }).subscribe({
-      next: () => this.router.navigate(['/auth/role-selection']),
+    this.auth.register({ name: this.fullName, email: this.email, password: this.password, role: this.role }).subscribe({
+      next: () => this.redirectByRole(this.role),
       error: (err) => {
         this.error.set(err?.error?.message ?? err?.message ?? 'Registration failed');
         this.loading.set(false);
       },
       complete: () => this.loading.set(false),
     });
+  }
+
+  private redirectByRole(role: string): void {
+    const r = (role || '').toLowerCase();
+    if (r === 'admin') this.router.navigate(['/admin/dashboard']);
+    else if (r === 'instructor') this.router.navigate(['/instructor/dashboard']);
+    else this.router.navigate(['/student/dashboard']);
   }
 }

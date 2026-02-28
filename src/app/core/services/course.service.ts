@@ -71,4 +71,16 @@ export class CourseService {
       }))
     );
   }
+
+  create(payload: { title: string; description: string; instructorId?: number }): Observable<CourseListItem> {
+    return this.http.post<CourseListItem>(this.apiUrl, payload);
+  }
+
+  update(id: number, payload: { title: string; description: string; instructorId?: number }): Observable<CourseListItem> {
+    return this.http.put<CourseListItem>(`${this.apiUrl}/${id}`, payload);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

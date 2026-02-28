@@ -1,7 +1,7 @@
 {
   "/api": {
-    "target": "https://turbo-disco-976pjxw7qw6jcxwv7-5275.app.github.dev",
-    "secure": true,
+    "target": "http://localhost:5275",
+    "secure": false,
     "changeOrigin": true
   }
 }

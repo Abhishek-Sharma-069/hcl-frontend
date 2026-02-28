@@ -58,16 +58,16 @@ export class AuthService {
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     const body = {
-      fullName: data.name,
+      name: data.name,
       email: data.email,
       password: data.password,
+      role: data.role ?? 'student',
     };
-    return this.http.post<RegisterResponse & { fullName?: string }>(`${this.apiUrl}/register`, body).pipe(
+    return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, body).pipe(
       tap((user) => {
         if (user) {
-          const name = user.name ?? (user as { fullName?: string }).fullName ?? data.name;
           const role = user.role ?? 'student';
-          this.setSession('', { id: user.id, name, email: user.email, role });
+          this.setSession('', { id: user.id, name: user.name, email: user.email, role });
         }
       })
     );
@@ -88,7 +88,12 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return !!this.getToken() || !!this.getUser();
+  }
+
+  hasRole(role: string): boolean {
+    const user = this.getUser();
+    return (user?.role ?? '').toLowerCase() === role.toLowerCase();
   }
 
   logout(): void {

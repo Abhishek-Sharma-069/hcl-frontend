@@ -91,12 +91,20 @@ export class LoginComponent {
     this.loading.set(true);
     this.error.set('');
     this.auth.login({ email: this.email, password: this.password }).subscribe({
-      next: () => this.router.navigate(['/student/dashboard']),
+      next: () => this.redirectByRole(),
       error: (err) => {
         this.error.set(err?.error?.message ?? err?.message ?? 'Login failed');
         this.loading.set(false);
       },
       complete: () => this.loading.set(false),
     });
+  }
+
+  private redirectByRole(): void {
+    const user = this.auth.getUser();
+    const role = (user?.role ?? '').toLowerCase();
+    if (role === 'admin') this.router.navigate(['/admin/dashboard']);
+    else if (role === 'instructor') this.router.navigate(['/instructor/dashboard']);
+    else this.router.navigate(['/student/dashboard']);
   }
 }

@@ -51,6 +51,12 @@ import { AuthService } from '../../core/services/auth.service';
             </nav>
 
             <div class="flex items-center gap-4">
+              @if (auth.hasRole('instructor')) {
+                <a routerLink="/instructor/dashboard" class="text-sm text-stone-500 hover:text-stone-700">Instructor</a>
+              }
+              @if (auth.hasRole('admin')) {
+                <a routerLink="/admin/dashboard" class="text-sm text-stone-500 hover:text-stone-700">Admin</a>
+              }
               <button type="button" (click)="auth.logout()" class="text-sm text-stone-500 hover:text-stone-700">Sign out</button>
             </div>
           </div>
